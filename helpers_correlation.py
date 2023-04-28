@@ -89,3 +89,50 @@ def gmm_fit(series, n_components = gmm_components):
         "stds": std, 
         "weights": weights
     }
+
+
+
+# log-log plot 
+import matplotlib.pyplot as plt
+def plot(X, y, labels, x_label, y_label, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None):
+    
+    if axes is None:
+        _, axes = plt.subplots(figsize=(8,6), dpi=dpi)
+    
+    if log_x:
+        axes.set_xscale('log')
+    if log_y:
+        axes.set_yscale('log')
+        
+    axes.set_xlabel(x_label, fontsize=14)
+    axes.set_ylabel(y_label, fontsize=14)
+    
+    axes.xaxis.set_tick_params(labelsize=12)
+    axes.yaxis.set_tick_params(labelsize=12)
+    
+    axes.grid(True, which='both', axis='both', alpha=0.5)
+
+    for i in range(len(X)):
+        axes.plot(X[i], y[i], label=labels[i], linewidth=1.5, linestyle='-', marker='o', markersize=4, alpha=0.8)
+    
+    if highlight_x is not None:
+        # Shade the region between the given x values in light blue
+        xmin, xmax = highlight_x
+        ymin, ymax = axes.get_ylim()
+        axes.fill_between([xmin, xmax], ymin, ymax, color='Cyan', alpha=0.2)
+    
+    axes.legend(fontsize=12)
+    
+    # Use LaTeX for axis labels
+    axes.xaxis.label.set_size(18)
+    axes.yaxis.label.set_size(18)
+    axes.xaxis.label.set_tex(r'\mathrm{' + x_label + '}')
+    axes.yaxis.label.set_tex(r'\mathrm{' + y_label + '}')
+    
+    return axes
+
+
+
+
+
+
