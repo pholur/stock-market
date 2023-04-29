@@ -115,7 +115,7 @@ for year in tqdm(years[-3:]):
     # try:
         data = extract_data(path=f"/mnt/SSD2/miyahara/mst_wrds_003/z_output_raw_1Min/z_output_raw_1Min_{year}/price") 
         data_numpy = np.array(data)
-        np.save(f"{path}data_{year}.npy", data_numpy)
+        np.save(f"{path}Preprocessed/data_{year}.npy", data_numpy)
     # except:
     #     pass
         # print(year)
