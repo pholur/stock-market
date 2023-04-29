@@ -4,6 +4,17 @@ This repository contains code and data for the paper "Scaling Law in Correlation
 
 ## Data
 
+Raw data is of the format:
+```
+2005-11-01 00:00:00,21.39
+2005-11-01 00:01:00,21.39
+2005-11-01 00:02:00,21.39
+2005-11-01 00:03:00,21.39
+2005-11-01 00:04:00,21.39
+2005-11-01 00:05:00,21.39
+2005-11-01 00:06:00,21.39
+```
+
 The data used in this study is collected from the S&P500 market data over almost 20 years (2004-2020). The data is preprocessed and stored in the `Preprocessed` directory. The `Correlations` directory contains the market-mode adjusted pairwise correlations of returns over different time scales (τ) for each year. The `Histograms` directory contains the scaled and zero-shifted distributions of the ci,j (τ)’s for each year.
 
 ## Code
