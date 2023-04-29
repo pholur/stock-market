@@ -24,11 +24,11 @@ def correlation(trajectory, tau=None, precision=precision):
     total_returns = np.vstack((r_o_t_tau, r_i_t_tau))
     correlations_i_j_tau_plus = np.corrcoef(total_returns)
     correlations_i_o_tau = correlations_i_j_tau_plus[1:,1:] # symmetric
-    plus = correlations_i_j_tau_plus[:1,1:].reshape(-1,1) * correlations_i_j_tau_plus[:1,1:].reshape(1,-1)
+    plus = correlations_i_j_tau_plus[:1,1:].reshape(-1,1) @ correlations_i_j_tau_plus[:1,1:].reshape(1,-1)
     c_tau = correlations_i_o_tau - plus
     
     normed =  np.sqrt(1 - np.square(correlations_i_j_tau_plus[:1,1:]))
-    c_tau_norm = np.divide(c_tau,normed.reshape(-1,1), normed.reshape(1,-1))
+    c_tau_norm = np.divide(c_tau,normed.reshape(-1,1) @ normed.reshape(1,-1))
 
     c_tau_raw = correlations_i_o_tau
     d_tau = np.sqrt(2*(1-correlations_i_o_tau))
@@ -39,6 +39,7 @@ def correlation(trajectory, tau=None, precision=precision):
             "market":np.round(plus,precision),
             "normalized": np.round(c_tau_norm,precision)
     }
+
 
 
 # compute the histogram of a series
