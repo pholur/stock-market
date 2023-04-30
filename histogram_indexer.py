@@ -12,7 +12,7 @@ if __name__ == "__main__": # only does yearly data
             
             for mode in ["raw_correlations", "minus_market_mode", "normalized"]:
                 vals = correlates[mode]
-                response = histogram(vals.flatten())
+                response = histogram(np.tril(vals).flatten())
                 
                 with open(f"{path}/Histograms/hist_{mode}_{year}_{tau}.pkl", "wb") as f:
                     pickle.dump(response, f, protocol=pickle.HIGHEST_PROTOCOL)

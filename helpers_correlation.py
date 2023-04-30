@@ -33,11 +33,11 @@ def correlation(trajectory, tau=None, precision=precision):
     c_tau_raw = correlations_i_o_tau
     d_tau = np.sqrt(2*(1-correlations_i_o_tau))
 
-    return {"raw_correlations":np.round(c_tau_raw,precision), 
-            "minus_market_mode":np.round(c_tau,precision), 
+    return {"raw_correlations":np.round(c_tau_raw), 
+            "minus_market_mode":np.round(c_tau), 
             "distances":np.round(d_tau,precision), 
-            "market":np.round(plus,precision),
-            "normalized": np.round(c_tau_norm,precision)
+            "market":np.round(plus),
+            "normalized": np.round(c_tau_norm)
     }
 
 
@@ -95,7 +95,7 @@ def gmm_fit(series, n_components = gmm_components):
 
 # log-log plot 
 import matplotlib.pyplot as plt
-def plot(X, y, labels, x_label, y_label, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None):
+def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None):
     
     if axes is None:
         _, axes = plt.subplots(figsize=(8,6), dpi=dpi)
@@ -114,7 +114,13 @@ def plot(X, y, labels, x_label, y_label, highlight_x = None, dpi=300, log_x = Tr
     axes.grid(True, which='both', axis='both', alpha=0.5)
 
     for i in range(len(X)):
-        axes.plot(X[i], y[i], label=labels[i], linewidth=1.5, linestyle='-', marker='o', markersize=4, alpha=0.8)
+        if i % (len(X)//6) == 0: # too many labels
+            label = labels[i]
+            axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=3, alpha=1.0)
+        else:
+            label = '_nolegend_'
+            color = "grey"
+            axes.plot(X[i], y[i], label=label, linewidth=4, linestyle='-', marker='o', markersize=2, alpha=0.2, color=color)
     
     if highlight_x is not None:
         # Shade the region between the given x values in light blue
@@ -122,14 +128,20 @@ def plot(X, y, labels, x_label, y_label, highlight_x = None, dpi=300, log_x = Tr
         ymin, ymax = axes.get_ylim()
         axes.fill_between([xmin, xmax], ymin, ymax, color='Cyan', alpha=0.2)
     
-    axes.legend(fontsize=12)
+    axes.legend(fontsize=12, loc="upper right")
     
     # Use LaTeX for axis labels
     axes.xaxis.label.set_size(18)
     axes.yaxis.label.set_size(18)
-    axes.xaxis.label.set_tex(r'\mathrm{' + x_label + '}')
-    axes.yaxis.label.set_tex(r'\mathrm{' + y_label + '}')
+    axes.set_xlabel(x_label)
+    axes.set_ylabel(y_label)
+    axes.set_title(title, fontsize=20)
     
+    # axes.xaxis.label(x_label)
+    # axes.yaxis.label(y_label)
+
+    #axes.yaxis.label.set_tex(r'\mathrm{' + y_label + '}')
+    axes.set_xlim(histogram_limits)
     return axes
 
 

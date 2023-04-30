@@ -32,10 +32,11 @@ def process_time_range(file_, time_start = "09:30:00", time_end = "16:00:00"):
         raise ValueError("Size of dataframe is too small.")
     # Add missing minutes
     # better job of interpolating missing minutes
-    idx = pd.date_range(start=df['time'].min(), 
-                        end=df['time'].max(), freq='min')
+    # idx = pd.date_range(start=df['time'].min(), 
+    #                     end=df['time'].max(), freq='min')
 
-    df = df.set_index('time').reindex(idx).interpolate().reset_index()
+    # df = df.set_index('time').reindex(idx).interpolate().reset_index()
+    
     # filter time range
     df = df[df["index"] >= time_start]
     df = df[df["index"] <= time_end]
@@ -111,10 +112,11 @@ def extract_data(path):
 
 
 
-for year in tqdm(years[-3:]):
+for year in tqdm(years[:]):
     # try:
         data = extract_data(path=f"/mnt/SSD2/miyahara/mst_wrds_003/z_output_raw_1Min/z_output_raw_1Min_{year}/price") 
         data_numpy = np.array(data)
+        print(data_numpy.shape)
         np.save(f"{path}Preprocessed/data_{year}.npy", data_numpy)
     # except:
     #     pass

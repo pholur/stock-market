@@ -26,8 +26,13 @@ resampling_variance = 0.2
 rasampling_count = 100000
 
 # histogram_plotter_limits
-histogram_limits = [-2, 2]
-histogram_bins = 200
+histogram_limits = [-4, 4]
+histogram_bins = 1000
 
 # gmm_components
 gmm_components = 2
+
+# Plotting specifics
+plotting_year_cutoff = 2012
+plotting_tau_cutoff = 1000
+plotting_tau_upper_bound = 30000
