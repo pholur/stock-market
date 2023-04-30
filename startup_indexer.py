@@ -38,8 +38,12 @@ def process_time_range(file_, time_start = "09:30:00", time_end = "16:00:00"):
     # df = df.set_index('time').reindex(idx).interpolate().reset_index()
     
     # filter time range
-    df = df[df["index"] >= time_start]
-    df = df[df["index"] <= time_end]
+    # print(df.shape, df["price"].min(), df["price"].max())
+
+    df = df[df["time"] >= time_start]
+    df = df[df["time"] <= time_end]
+    
+    # print(df.shape, df["price"].min(), df["price"].max())
     
     # extract prices
     price_list = [float(price) for price in list(df["price"])]
