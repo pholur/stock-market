@@ -7,7 +7,7 @@ from CONSTANTS import *
 def kl(p, q, gap):
     p = np.asarray(p, dtype=np.float)
     q = np.asarray(q, dtype=np.float)
-    return np.sum(np.where(p != 0, gap * p * np.log(p+SMALL_CONSTANT / (q+SMALL_CONSTANT)), 0))
+    return np.sum(np.where(p != 0, gap * p * np.log( (p+SMALL_CONSTANT) / (q+SMALL_CONSTANT) ), 0))
 
 
 
@@ -22,8 +22,10 @@ def correlation(trajectory, tau=None, precision=precision):
     r_i_t_tau = np.log(trajectory[:,0+tau:dim_y]) - np.log(trajectory[:,:dim_y-tau])
     r_o_t_tau = np.mean(r_i_t_tau, axis=0)
     total_returns = np.vstack((r_o_t_tau, r_i_t_tau))
+    
     correlations_i_j_tau_plus = np.corrcoef(total_returns)
     correlations_i_o_tau = correlations_i_j_tau_plus[1:,1:] # symmetric
+    
     plus = correlations_i_j_tau_plus[:1,1:].reshape(-1,1) @ correlations_i_j_tau_plus[:1,1:].reshape(1,-1)
     c_tau = correlations_i_o_tau - plus
     
@@ -33,11 +35,11 @@ def correlation(trajectory, tau=None, precision=precision):
     c_tau_raw = correlations_i_o_tau
     d_tau = np.sqrt(2*(1-correlations_i_o_tau))
 
-    return {"raw_correlations":np.round(c_tau_raw), 
-            "minus_market_mode":np.round(c_tau), 
+    return {"raw_correlations":c_tau_raw, 
+            "minus_market_mode":c_tau, 
             "distances":np.round(d_tau,precision), 
-            "market":np.round(plus),
-            "normalized": np.round(c_tau_norm)
+            "market":plus,
+            "normalized": c_tau_norm
     }
 
 
@@ -58,7 +60,7 @@ def histogram(array_rho, range_min = histogram_limits[0],
     
     for i in range(len(hist_array[0])):
         x_original_cij.append(hist_array[1][i])
-        y_original_cij.append(prob_array[i])
+        y_original_cij.append(hist_array[0][i])
 
     x_scaled_cij = []
     y_scaled_cij = []
@@ -71,7 +73,9 @@ def histogram(array_rho, range_min = histogram_limits[0],
         "y": y_scaled_cij, 
         "mu": mean_c_ij,
         "var": var_c_ij, 
-        "sigma": sigma_cij
+        "sigma": sigma_cij,
+        "x_orig": x_original_cij,
+        "y_orig": y_original_cij
     }
 
 
@@ -95,7 +99,7 @@ def gmm_fit(series, n_components = gmm_components):
 
 # log-log plot 
 import matplotlib.pyplot as plt
-def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None):
+def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None, plot_scaling=True):
     
     if axes is None:
         _, axes = plt.subplots(figsize=(8,6), dpi=dpi)
@@ -114,7 +118,7 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     axes.grid(True, which='both', axis='both', alpha=0.5)
 
     for i in range(len(X)):
-        if i % (len(X)//6) == 0: # too many labels
+        if i % (len(X)//6) == 0 or plot_scaling: # too many labels or don't do anything for the scaling law
             label = labels[i]
             axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=3, alpha=1.0)
         else:
@@ -141,7 +145,11 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     # axes.yaxis.label(y_label)
 
     #axes.yaxis.label.set_tex(r'\mathrm{' + y_label + '}')
-    axes.set_xlim(histogram_limits)
+    if not plot_scaling:
+        axes.set_xlim(histogram_plot_limits)
+    else:
+        axes.set_xlim([100,50000])
+        
     return axes
 
 

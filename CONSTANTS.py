@@ -26,8 +26,9 @@ resampling_variance = 0.2
 rasampling_count = 100000
 
 # histogram_plotter_limits
-histogram_limits = [-4, 4]
-histogram_bins = 1000
+histogram_limits = [-1, 1]
+histogram_bins = 200
+histogram_plot_limits = [-4,4] # due to rescaling
 
 # gmm_components
 gmm_components = 2
