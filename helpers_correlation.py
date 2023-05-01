@@ -3,11 +3,32 @@ from CONSTANTS import *
 
 
 
+def wrap_kl(list_of_distributions):
+    kl_mat = np.zeros((len(list_of_distributions), len(list_of_distributions)))
+    for i, dist_1 in enumerate(list_of_distributions):
+        for j, dist_2 in enumerate(list_of_distributions):
+            kl_mat[i,j] = kl(dist_1, dist_2)
+    return kl_mat
+
+
+
 # Compute the KL divergence
-def kl(p, q, gap):
+def kl(p, q):
+    main_line = np.linspace(kl_div_limits[0],kl_div_limits[1],kl_bins)
+    gap = main_line[1] - main_line[0]
     p = np.asarray(p, dtype=np.float)
     q = np.asarray(q, dtype=np.float)
     return np.sum(np.where(p != 0, gap * p * np.log( (p+SMALL_CONSTANT) / (q+SMALL_CONSTANT) ), 0))
+
+
+def resample_histogram(x, y):
+    main_line = np.linspace(kl_div_limits[0],kl_div_limits[1],kl_bins)
+    values = []
+    for tup in zip(x,y):
+        if tup[0] < kl_div_limits[1] and tup[0] > kl_div_limits[0]:
+            values.extend(np.random.normal(tup[0], resampling_variance, int(tup[1]*resampling_count)).tolist())
+    raw = np.histogram(values, bins = main_line, density=True)[0]
+    return (main_line[:-1],raw)
 
 
 
