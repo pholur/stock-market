@@ -6,6 +6,7 @@ years = range(2004,2021)
 
 # investment horizon
 taus = [1,5,10,20,40] + list(range(60,1600,50)) + list(range(1600,50000,1000))
+chosen_plotting_taus = [1, 10, 50, 100, 200, 500, 950, 1000, 1200, 2500, 5000, 10000, 20000, 30000]
 
 # checkpoint path
 path = "/mnt/SSD5/pholur/Stock_Market/"
