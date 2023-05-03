@@ -24,7 +24,7 @@ LARGE_CONSTANT = 100000
 kl_div_limits = [-5, 5]
 kl_bins = 500
 resampling_variance = 0.2
-resampling_count = 100000
+resampling_count = 10000
 
 # histogram_plotter_limits
 histogram_limits = [-1, 1]
