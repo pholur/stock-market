@@ -8,7 +8,7 @@ import pickle
 from tqdm import tqdm
 
 if __name__ == "__main__": # only does yearly data
-    for year in tqdm(years):
+    for year in tqdm(years[:]):
         mat = np.load(f"{path}Preprocessed/data_{year}.npy", allow_pickle=True)
         for tau in tqdm(taus):
             response = correlation(mat, tau)

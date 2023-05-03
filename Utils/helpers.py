@@ -143,11 +143,11 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     for i in range(len(X)):
         if i % (len(X)//6) == 0 or plot_scaling: # too many labels or don't do anything for the scaling law
             label = labels[i]
-            axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=4, alpha=1.0)
+            axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=2, alpha=1.0)
         else:
             label = '_nolegend_'
             color = "grey"
-            axes.plot(X[i], y[i], label=label, linewidth=4, linestyle='-', marker='o', markersize=2, alpha=0.2, color=color)
+            axes.plot(X[i], y[i], label=label, linewidth=1, linestyle='-', marker='o', markersize=0.5, alpha=0.2, color=color)
     
     if highlight_x is not None:
         # Shade the region between the given x values in light blue
@@ -158,8 +158,8 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     axes.legend(fontsize=12, loc="upper right")
     
     # Use LaTeX for axis labels
-    axes.xaxis.label.set_size(18)
-    axes.yaxis.label.set_size(18)
+    axes.xaxis.label.set_size(14)
+    axes.yaxis.label.set_size(14)
     axes.set_xlabel(x_label)
     axes.set_ylabel(y_label)
     axes.set_title(title, fontsize=20)
