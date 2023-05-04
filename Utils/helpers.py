@@ -122,7 +122,7 @@ def gmm_fit(series, n_components = gmm_components):
 
 # log-log plot 
 import matplotlib.pyplot as plt
-def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None, plot_scaling=False):
+def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log_x = True, log_y = True, axes = None, plot_scaling=False, plot_gmm=False, plot_kurt=False, plot_lambda=False):
     
     if axes is None:
         _, axes = plt.subplots(figsize=(8,6), dpi=dpi)
@@ -141,7 +141,13 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     axes.grid(True, which='both', axis='both', alpha=0.5)
 
     for i in range(len(X)):
-        if i % (len(X)//6) == 0 or plot_scaling: # too many labels or don't do anything for the scaling law
+        if plot_lambda:
+            label = labels[i]
+            axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=2, alpha=1.0)
+        elif ((len(X)//6 == 0) or (i % (len(X)//6) == 0) or plot_scaling or plot_gmm) and not plot_kurt: # too many labels or don't do anything for the scaling law
+            label = labels[i]
+            axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=2, alpha=1.0)
+        elif plot_kurt and (i in [0, 3, 6, 9, 12, 15]):
             label = labels[i]
             axes.plot(X[i], y[i], label=label, linewidth=2, linestyle='-', marker='o', markersize=2, alpha=1.0)
         else:
@@ -154,6 +160,11 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
         xmin, xmax = highlight_x
         ymin, ymax = axes.get_ylim()
         axes.fill_between([xmin, xmax], ymin, ymax, color='Cyan', alpha=0.2)
+    elif plot_lambda:
+        ymin, ymax = axes.get_ylim()
+        axes.fill_between([2007.5, 2008.5], ymin, ymax, color='Cyan', alpha=0.2)
+        axes.fill_between([2019.5, 2020], ymin, ymax, color='Cyan', alpha=0.2)
+
     
     axes.legend(fontsize=12, loc="upper right")
     
@@ -168,11 +179,14 @@ def plot(X, y, labels, x_label, y_label, title, highlight_x = None, dpi=300, log
     # axes.yaxis.label(y_label)
 
     #axes.yaxis.label.set_tex(r'\mathrm{' + y_label + '}')
-    if not plot_scaling:
+    if plot_lambda:
+        pass
+    elif plot_gmm:
+        axes.set_xlim([100,50000])
+    elif not plot_scaling:
         axes.set_xlim(histogram_plot_limits)
     else:
         axes.set_xlim([100,50000])
-        
     return axes
 
 
